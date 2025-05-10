@@ -1,4 +1,3 @@
-
 package org.skypro.skyshop.basket;
 
 import org.skypro.skyshop.product.Product;
@@ -25,7 +24,6 @@ public class ProductBasket {
                 sum += product.getPrice();
             }
         }
-
         return sum;
     }
 
@@ -38,36 +36,39 @@ public class ProductBasket {
         return false;
     }
 
-
     public void printProductBasket() {
+        int specialGoods = 0;
+        double sum = 0;
         if (basketIsNotEmpty()) {
             for (Product product : basket) {
                 if (product != null) {
                     System.out.println(product);
+                    sum += product.getPrice();
+                    if (product.isSpecial()) {
+                        specialGoods++;
+                    }
                 }
             }
-            System.out.println(getSumOfProducts());
+            System.out.println("--------------------------------------------------");
+            System.out.printf("Total: %.2f ₽\n", sum);
+            System.out.printf("Special goods: %d\n", specialGoods);
         } else {
             System.out.println("The basket is empty");
         }
     }
 
     public boolean checkProduct(String name) {
- for (Product product : basket) {
-        if (product != null && Objects.equals(product.getName(), name)) {
-            return true;
+        for (Product product : basket) {
+            if (product != null && Objects.equals(product.getName(), name)) {
+                return true;
+            }
         }
-    }
         return false;
-}
+    }
 
     public void cleanBasket() {
         for (int i = 0; i < basket.length; i++) {
-            if (basket[i] != null) {
-                basket[i] = null;
-            }
-
+            basket[i] = null;
         }
     }
 }
-
