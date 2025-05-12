@@ -34,3 +34,4 @@ public abstract class Product {
         return Objects.hash(name);
     }
 }
+

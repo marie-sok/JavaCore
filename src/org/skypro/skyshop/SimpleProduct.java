@@ -1,4 +1,5 @@
 package org.skypro.skyshop.product;
+
 import java.util.Objects;
 
 public class SimpleProduct extends Product {
@@ -37,3 +38,4 @@ public class SimpleProduct extends Product {
         return Objects.hash(super.hashCode(), price);
     }
 }
+
