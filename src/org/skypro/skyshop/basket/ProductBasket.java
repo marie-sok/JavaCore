@@ -4,6 +4,8 @@ import org.skypro.skyshop.product.Product;
 
 import java.util.Objects;
 
+import static org.skypro.skyshop.ProductBasket.ProductBasket.productInBasket;
+
 public class ProductBasket {
     private final Product[] basket = new Product[3];
 
@@ -67,8 +69,14 @@ public class ProductBasket {
     }
 
     public void cleanBasket() {
-        for (int i = 0; i < basket.length; i++) {
-            basket[i] = null;
+        if (!productInBasket()) {
+            System.out.println("The basket is empty");
+            return;
+        }
+        for (Product product : basket) {
+            if (product != null) {
+                System.out.println(getSumOfProducts());
+            }
         }
     }
 }
