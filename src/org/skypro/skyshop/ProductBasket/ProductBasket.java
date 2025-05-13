@@ -39,21 +39,23 @@ public class ProductBasket {
     public void printProductBasket() {
         int specialGoods = 0;
         double sum = 0;
-        if (basketIsNotEmpty()) {
-            for (Product product : basket) {
-                if (product != null) {
-                    System.out.println(product);
-                    sum += product.getPrice();
-                    if (product.isSpecial()) {
-                        specialGoods++;
-                    }
+        boolean isEmpty = true;
+        for (Product product : basket) {
+            if (product != null) {
+                System.out.println(product);
+                isEmpty = false;
+                sum += product.getPrice();
+                if (product.isSpecial()) {
+                    specialGoods++;
                 }
             }
+        }
+        if (isEmpty) {
+            System.out.println("The basket is empty");
+        } else {
             System.out.println("--------------------------------------------------");
             System.out.printf("Total: %.2f ₽\n", sum);
             System.out.printf("Special goods: %d\n", specialGoods);
-        } else {
-            System.out.println("The basket is empty");
         }
     }
 
@@ -67,15 +69,15 @@ public class ProductBasket {
     }
 
     public void cleanBasket() {
-            if (!ProductInBasket()) {
-                System.out.println("The basket is empty");
-                return;
+        if (!ProductInBasket()) {
+            System.out.println("The basket is empty");
+            return;
+        }
+        for (Product product : basket) {
+            if (product != null) {
+                System.out.println(getSumOfProducts());
             }
-            for (Product product : basket) {
-                if (product != null) {
-                    System.out.println(getSumOfProducts());
-                }
-            }
+        }
     }
 
     private boolean ProductInBasket() {
