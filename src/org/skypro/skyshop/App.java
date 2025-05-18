@@ -16,7 +16,7 @@ public class App {
         ProductBasket productBasket = new ProductBasket();
 
         Product product1 = new SimpleProduct("PopSocket", 530);
-        Product product2 = new FixPriceProduct("USB-C Cable", 800);
+        Product product2 = new FixPriceProduct("USB-C Cable");
         Product product3 = new DiscountedProduct("Earphones", 4500, 30);
 
         productBasket.addProduct(product1);
