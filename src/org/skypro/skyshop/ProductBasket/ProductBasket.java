@@ -4,6 +4,7 @@ import org.skypro.skyshop.product.Product;
 
 import java.util.Objects;
 
+
 public class ProductBasket {
     private final Product[] basket = new Product[3];
 
