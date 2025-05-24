@@ -7,8 +7,12 @@ public class SimpleProduct extends Product {
 
     public SimpleProduct(String name, double price) {
         super(name);
+        if (price <= 0) {
+            throw new IllegalArgumentException("The price cannot be less than or equal zero");
+        }
         this.price = price;
     }
+
 
     @Override
     public double getPrice() {
