@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public final class SearchEngine {
     private final Searchable[] searchableItems;
+    public static final int MAX_RESULTS = 5;
 
     public SearchEngine(int size) {
 
@@ -27,7 +28,7 @@ public final class SearchEngine {
     }
 
 
-    public static final int MAX_RESULTS = 5;
+
 
     public Searchable[] search(String query) {
         Searchable[] results = new Searchable[MAX_RESULTS];
@@ -35,10 +36,7 @@ public final class SearchEngine {
 
         int i = 0;
         for (Searchable searchable : searchableItems) {
-            if (searchable == null) {
-                continue;
-            }
-            if (searchable.getSearchTerm().contains(query)) {
+            if (searchable != null && searchable.getSearchTerm().contains(query)) {
                 results[i++] = searchable;
                 if (i >= MAX_RESULTS) {
                     break;
