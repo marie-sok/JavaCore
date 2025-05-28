@@ -4,85 +4,79 @@ import org.skypro.skyshop.BestResultNotFound.BestResultNotFound;
 import org.skypro.skyshop.Utilities.ArrayUtil;
 import org.skypro.skyshop.search.Searchable;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public final class SearchEngine {
-    private final Searchable[] searchableItems;
-    public static final int MAX_RESULTS = 5;
+    private final List<Searchable> searchableItems = new ArrayList<>();
+    private Searchable searchable;
 
-    public SearchEngine(int size) {
-
-        this.searchableItems = new Searchable[size];
-    }
 
     public void add(Searchable searchable) {
-        int Index = ArrayUtil.getIndex(searchableItems, true);
-        if (Index == -1) {
-            throw new IllegalArgumentException("The array of search elements is full") {
+        if (searchable == null) {
+            throw new IllegalArgumentException(
+                    new StringBuilder("The element of a search cannot be null").toString()
+            );
 
-            };
         }
 
 
-        searchableItems[Index] = searchable;
     }
 
+    public List<Searchable> search(String query) {
+        List<Searchable> results = new ArrayList<>();
 
-
-
-    public Searchable[] search(String query) {
-        Searchable[] results = new Searchable[MAX_RESULTS];
-        Arrays.fill(results, null);
-
-        int i = 0;
         for (Searchable searchable : searchableItems) {
-            if (searchable != null && searchable.getSearchTerm().contains(query)) {
-                results[i++] = searchable;
-                if (i >= MAX_RESULTS) {
-                    break;
-                }
+
+            if (searchable.getSearchTerm().contains(query)) {
+                results.add(searchable);
+
             }
         }
-        return results;
+            return results;
+
     }
 
-    public static int countMatches(String searchTerm, String query) {
-        if (searchTerm.isEmpty() || query.isEmpty()) {
-            return 0;
-        }
-        int count = 0, fromIndex = 0;
-        int queryLenght = query.length();
-        while ((fromIndex = searchTerm.indexOf(query, fromIndex)) != -1) ;
-        count++;
-        fromIndex += queryLenght;
+    public static int countMatches(String searchTerm, String query){
+            if (searchTerm.isEmpty() || query.isEmpty()) {
+                return 0;
+            }
+            int count = 0, fromIndex = 0;
+            int queryLenght = query.length();
+            while ((fromIndex = searchTerm.indexOf(query, fromIndex)) != -1) ;
+            count++;
+            fromIndex += queryLenght;
 
-        return count;
+            return count;
 
     }
 
     public Searchable searchMostRelevant(String query) throws BestResultNotFound {
-        int firstIndex = ArrayUtil.getIndex(searchableItems, false);
-        if (firstIndex == -1) {
-            throw new BestResultNotFound("An array of elements to search is empty");
-        }
-        Searchable mostRelevant = searchableItems[firstIndex];
-        int maxCount = countMatches(mostRelevant.getSearchTerm(), query);
-        for (Searchable searchable : searchableItems) {
-            if (searchable != null) {
-                int count = countMatches(searchable.getSearchTerm(), query);
-                if (count > maxCount) {
-                    maxCount = count;
-                    mostRelevant = searchable;
-                }
-            }
+        if (searchableItems.isEmpty()) {
+            throw new BestResultNotFound(
+                    new StringBuilder("An array of elements to search is empty").toString()
+            );
         }
 
+
+        Searchable mostRelevant = null;
+        int maxCount = -1;
+
+        int count = countMatches(searchable.getSearchTerm(), query);
+        if (count > maxCount) {
+            maxCount = count;
+            mostRelevant = searchable;
+        }
         if (maxCount <= 0) {
-            throw new BestResultNotFound("No matches found");
+            throw new BestResultNotFound(
+                    new StringBuilder("No matches found").toString()
+            );
         }
 
         return mostRelevant;
     }
 }
+
 
 

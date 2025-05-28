@@ -2,20 +2,40 @@ package org.skypro.skyshop.ProductBasket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.Objects;
+import java.util.*;
+
 
 
 public class ProductBasket {
-    private final Product[] basket = new Product[3];
+    private final List<Product> basket = new ArrayList<>();
+    private final List<Product> deletedProducts = new LinkedList<>();
 
     public void addProduct(Product product) {
-        for (int i = 0; i < basket.length; i++) {
-            if (basket[i] == null) {
-                basket[i] = product;
-                return;
-            }
+        basket.add(product);
+
+    }
+
+    public List<Product> deleteProductsByName(String name) {
+        Iterator<Product> iterator = basket.iterator();
+        while (iterator.hasNext()) ;
+        Product product = iterator.next();
+        if (product != null & Objects.equals(product.getName(), name)) {
+            deletedProducts.add(product);
+            iterator.remove();
         }
-        System.out.println("Unable to add product to basket - basket is full");
+        return deletedProducts;
+    }
+
+    public void printDeletedProducts() {
+        StringBuilder sb = new StringBuilder("List of deleted products : \n");
+        if (deletedProducts.isEmpty()) {
+            for (Product product : deletedProducts) {
+                sb.append(product).append("\n");
+            }
+        } else {
+            sb.append("The list is empty");
+        }
+        System.out.println(sb.toString());
     }
 
     public double getSumOfProducts() {
@@ -29,36 +49,36 @@ public class ProductBasket {
     }
 
     private boolean basketIsNotEmpty() {
-        for (Product product : basket) {
-            if (product != null) {
-                return true;
-            }
-        }
-        return false;
+        return !basket.isEmpty();
     }
 
+
     public void printProductBasket() {
-        int specialGoods = 0;
+        if (basketIsNotEmpty()) {
+            System.out.println("The basket is empty");
+            return;
+        }
+        StringBuilder sb = new StringBuilder();
         double sum = 0;
-        boolean isEmpty = true;
+        int specialGoods = 0;
+
         for (Product product : basket) {
             if (product != null) {
-                System.out.println(product);
-                isEmpty = false;
+                sb.append(product).append("\n");
                 sum += product.getPrice();
                 if (product.isSpecial()) {
                     specialGoods++;
                 }
             }
         }
-        if (isEmpty) {
-            System.out.println("The basket is empty");
-        } else {
-            System.out.println("--------------------------------------------------");
-            System.out.printf("Total: %.2f ₽\n", sum);
-            System.out.printf("Special goods: %d\n", specialGoods);
-        }
+
+        sb.append("--------------------------------------------------")
+        .append(String.format("Total: %.2f ₽\n", sum))
+        .append(String.format("Special goods: %d\n", specialGoods));
+
+        System.out.println(sb.toString());
     }
+
 
     public boolean checkProduct(String name) {
         for (Product product : basket) {
@@ -70,15 +90,7 @@ public class ProductBasket {
     }
 
     public void cleanBasket() {
-        if (!ProductInBasket()) {
-            System.out.println("The basket is empty");
-            return;
-        }
-        for (Product product : basket) {
-            if (product != null) {
-                System.out.println(getSumOfProducts());
-            }
-        }
+        basket.clear();
     }
 
     private boolean ProductInBasket() {
