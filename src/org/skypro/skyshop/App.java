@@ -8,8 +8,10 @@ import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.search.Searchable;
+import org.skypro.skyshop.BestResultNotFound.BestResultNotFound;
 
 import java.util.Arrays;
+import java.util.IllegalFormatConversionException;
 
 public class App {
     public static void main(String[] args) {
@@ -60,21 +62,30 @@ public class App {
         printSeparator();
 
         Article article1 = new Article("PopSocket.", "This is universal phoneholder that allows you to comfortably hold your device in your hand and it's also a stylish accessory.");
-        Article article2 = new Article("USB-C Cable.","No one has ever tied you to the power supply as much as I have.");
+        Article article2 = new Article("USB-C Cable.", "No one has ever tied you to the power supply as much as I have.");
         Article article3 = new Article("Earphones.", "The new noise cancellation function isolates you into space from the surrounding world.");
 
 
         SearchEngine searchEngine = new SearchEngine(6);
 
-        searchEngine.add(product1);
-        searchEngine.add(product2);
-        searchEngine.add(product3);
-        searchEngine.add(article1);
-        searchEngine.add(article2);
-        searchEngine.add(article3);
+        try {
+
+            searchEngine.add(product1);
+            searchEngine.add(product2);
+            searchEngine.add(product3);
+            searchEngine.add(article1);
+            searchEngine.add(article2);
+            searchEngine.add(article3);
+
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
 
         String query = "Earphones";
         Searchable[] searchResults = searchEngine.search(query);
+
         System.out.println("Search Results " + query + ": " + Arrays.toString(searchResults));
 
         query = "Keyboard";
@@ -99,9 +110,106 @@ public class App {
                 System.out.println("Name searchable: " + searchResult.getStringRepresentation());
             }
         }
+
+        printSeparator();
+
+
+        System.out.println("Create SimpleProduct with an empty name:");
+        try {
+            Product product4 = new SimpleProduct(" ", 1);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
+        System.out.println("Create SimpleProduct with an empty name:");
+        try {
+            Product product4 = new SimpleProduct(" ", 1);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
+        System.out.println("Create SimpleProduct with incorrect price:");
+        try {
+            Product product4 = new SimpleProduct("Magic Pencil", -1);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
+        System.out.println("Создание SimpleProduct with incorrect price:");
+        try {
+            Product product4 = new SimpleProduct(" ", -1);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
+        System.out.println("Create FixPriceProduct with incorrect name:");
+        try {
+            Product product4 = new FixPriceProduct(" ");
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
+        System.out.println("Create DiscountedProduct with incorrect price:");
+
+        try {
+            Product product4 = new DiscountedProduct(" ", 170, 15);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
+        System.out.println("Create DiscountedProduct with incorrect price:");
+        try {
+            Product product4 = new DiscountedProduct("Papers", -1, 5);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
+
+        System.out.println("Create DiscountedProduct with some discount:");
+        try {
+            Product product4 = new DiscountedProduct("Stickerpack", 300, 200);
+        } catch (IllegalArgumentException ex) {
+            System.out.println("Error: " + ex.getMessage());
+        }
+        printSeparator();
+
+
+        Searchable bestResult;
+
+        query = "riddle erudite";
+        System.out.println("searching for the best result for " + query + "   ");
+        try {
+            bestResult = searchEngine.searchMostRelevant(query);
+            System.out.println("Search results " + query + ": " + bestResult);
+        } catch (BestResultNotFound ex) {
+            System.out.println("Error: " + ex.getMessage());
+
+            System.out.println();
+
+            query = "They say the cows were kidnapped by UFOs";
+            System.out.println("searching for the best result for " + query + "");
+        }
+        try {
+            bestResult = searchEngine.searchMostRelevant(query);
+            System.out.println("Search results " + query + ": " + bestResult);
+        } catch (BestResultNotFound ex) {
+
+            System.out.println("Error: " + ex.getMessage());
+        }
+        System.out.println();
     }
 
+
     public static void printSeparator() {
+
     }
 }
+
+
 

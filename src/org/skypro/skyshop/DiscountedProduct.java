@@ -8,6 +8,12 @@ public class DiscountedProduct extends Product {
 
     public DiscountedProduct(String name, double price, int discount) {
         super(name);
+        if (price <= 0) {
+            throw new IllegalArgumentException("The price cannot be less than or equal zero");
+        }
+        if (discount < 0 || discount > 100) {
+            throw new IllegalArgumentException("The size of the discount can be from zero to 100");
+        }
         this.price = price;
         this.discount = discount;
     }

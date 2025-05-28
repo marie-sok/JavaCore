@@ -4,14 +4,20 @@ import org.skypro.skyshop.search.Searchable;
 
 import java.util.Objects;
 
+
 public abstract class Product implements Searchable {
     private final String name;
 
     public Product(String name) {
+        if (name == null | name.isBlank()) {
+            throw new IllegalArgumentException("The product name cannot be empty");
+        }
         this.name = name;
     }
 
+
     public String getName() {
+
         return name;
     }
 
@@ -20,11 +26,12 @@ public abstract class Product implements Searchable {
     public abstract boolean isSpecial();
 
     @Override
-    public String getSearchTerm(){
+    public String getSearchTerm() {
         return getName();
     }
+
     @Override
-    public String getContentType(){
+    public String getContentType() {
         return "PRODUCT";
     }
 
