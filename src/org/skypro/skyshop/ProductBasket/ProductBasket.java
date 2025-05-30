@@ -3,7 +3,6 @@ import org.skypro.skyshop.product.Product;
 
 import java.util.*;
 
-
 public class ProductBasket {
     private final List<Product> basket = new ArrayList<>();
     private final List<Product> deletedProducts = new LinkedList<>();

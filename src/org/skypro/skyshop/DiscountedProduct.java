@@ -64,4 +64,3 @@ public class DiscountedProduct extends Product {
         return Objects.hash(super.hashCode(), price, discount);
     }
 }
-
