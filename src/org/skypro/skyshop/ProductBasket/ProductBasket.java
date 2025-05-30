@@ -1,9 +1,7 @@
 package org.skypro.skyshop.ProductBasket;
-
 import org.skypro.skyshop.product.Product;
 
 import java.util.*;
-
 
 
 public class ProductBasket {
@@ -12,23 +10,23 @@ public class ProductBasket {
 
     public void addProduct(Product product) {
         basket.add(product);
-
     }
 
     public List<Product> deleteProductsByName(String name) {
         Iterator<Product> iterator = basket.iterator();
-        while (iterator.hasNext()) ;
-        Product product = iterator.next();
-        if (product != null & Objects.equals(product.getName(), name)) {
-            deletedProducts.add(product);
-            iterator.remove();
+        while (iterator.hasNext()) {
+            Product product = iterator.next();
+            if (product != null && Objects.equals(product.getName(), name)) {
+                deletedProducts.add(product);
+                iterator.remove();
+            }
         }
         return deletedProducts;
     }
 
     public void printDeletedProducts() {
-        StringBuilder sb = new StringBuilder("List of deleted products : \n");
-        if (deletedProducts.isEmpty()) {
+        StringBuilder sb = new StringBuilder("List of deleted products: \n");
+        if (!deletedProducts.isEmpty()) {
             for (Product product : deletedProducts) {
                 sb.append(product).append("\n");
             }
@@ -52,9 +50,8 @@ public class ProductBasket {
         return !basket.isEmpty();
     }
 
-
     public void printProductBasket() {
-        if (basketIsNotEmpty()) {
+        if (!basketIsNotEmpty()) {
             System.out.println("The basket is empty");
             return;
         }
@@ -72,13 +69,12 @@ public class ProductBasket {
             }
         }
 
-        sb.append("--------------------------------------------------")
-        .append(String.format("Total: %.2f ₽\n", sum))
-        .append(String.format("Special goods: %d\n", specialGoods));
+        sb.append("--------------------------------------------------\n")
+                .append(String.format("Total: %.2f ₽\n", sum))
+                .append(String.format("Special goods: %d\n", specialGoods));
 
         System.out.println(sb.toString());
     }
-
 
     public boolean checkProduct(String name) {
         for (Product product : basket) {
@@ -91,9 +87,5 @@ public class ProductBasket {
 
     public void cleanBasket() {
         basket.clear();
-    }
-
-    private boolean ProductInBasket() {
-        return false;
     }
 }
