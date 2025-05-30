@@ -16,7 +16,7 @@ public class Article implements Searchable {
     public String getArticleTitle() {
         return articleTitle;
     }
-    
+
 
     public String getArticleText() {
         return articleText;
@@ -53,4 +53,3 @@ public class Article implements Searchable {
         return Objects.hash(articleTitle, articleText);
     }
 }
-
