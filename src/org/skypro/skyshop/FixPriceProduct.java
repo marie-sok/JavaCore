@@ -17,7 +17,6 @@ public class FixPriceProduct extends Product {
         return true;
     }
 
-
     @Override
     public String toString() {
         return new StringBuilder("FixPrice!")
@@ -27,5 +26,4 @@ public class FixPriceProduct extends Product {
                 .toString();
     }
 }
-
 
