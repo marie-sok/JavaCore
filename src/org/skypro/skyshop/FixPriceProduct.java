@@ -26,3 +26,4 @@ public class FixPriceProduct extends Product {
                 .toString();
     }
 }
+
