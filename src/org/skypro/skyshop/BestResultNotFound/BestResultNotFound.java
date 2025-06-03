@@ -6,3 +6,4 @@ public class BestResultNotFound extends IOException {
     }
 
 }
+
