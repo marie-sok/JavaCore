@@ -11,3 +11,4 @@ public interface Searchable {
                 .toString();
     }
 }
+
