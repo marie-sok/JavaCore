@@ -10,7 +10,9 @@ import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.search.*;
 import org.skypro.skyshop.SearchEngine.SearchEngine;
 
+
 import java.util.List;
+import java.util.Map;
 
 
 public class App {
@@ -37,14 +39,12 @@ public class App {
 
 
         System.out.println(new StringBuilder("\nDelete Product - PopSocket"));
-        productBasket.deleteProductsByName("PopSocket");
-        productBasket.printDeletedProducts();
+        productBasket.deleteAndPrintProductsByName("PopSocket");
         System.out.println();
         productBasket.printProductBasket();
 
         System.out.println(new StringBuilder("\nDelete product - Tralalelo Tralala"));
-        productBasket.deleteProductsByName("Delete product - Tralalelo Tralala");
-        productBasket.printDeletedProducts();
+        productBasket.deleteAndPrintProductsByName("Tralalelo Tralala");
         System.out.println();
         productBasket.printProductBasket();
         printSeparator();
@@ -162,10 +162,13 @@ public class App {
                 .append("\n"));
 
 
+
         System.out.println(new StringBuilder("Search result by name: "));
 
-        List<Searchable> searchResults = searchEngine.search(query);
-        for (Searchable searchResult : searchResults) {
+
+        Map<String,Searchable> searchResults = searchEngine.search(query);
+        for (Map.Entry<String,Searchable> entry:searchResults.entrySet()){
+            Searchable searchResult = entry.getValue();
             if (searchResult != null) {
                 System.out.println(new StringBuilder()
                         .append("Name searchable: ")
