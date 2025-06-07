@@ -1,28 +1,45 @@
-// Product.java
 package org.skypro.skyshop.product;
+
+import org.skypro.skyshop.search.Searchable;
 
 import java.util.Objects;
 
-public class Product {
-    private final String name;
-    private final double price;
 
-    public Product(String name, double price) {
+public abstract class Product implements Searchable {
+    private final String name;
+
+    public Product(String name) {
+        if (name == null | name.isBlank()) {
+            throw new IllegalArgumentException(
+                    new StringBuilder("The product name cannot be empty").toString()
+            );
+        }
         this.name = name;
-        this.price = price;
     }
 
+
     public String getName() {
+
         return name;
     }
 
-    public double getPrice() {
-        return price;
+    public abstract double getPrice();
+
+    public abstract boolean isSpecial();
+
+    @Override
+    public String getSearchTerm() {
+        return getName();
+    }
+
+    @Override
+    public String getContentType() {
+        return "PRODUCT";
     }
 
     @Override
     public String toString() {
-        return name + ": " + price + " RUB";
+        return new StringBuilder(name).toString();
     }
 
     @Override
@@ -30,12 +47,13 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return Double.compare(price, product.price) == 0 &&
-                Objects.equals(name, product.name);
+        return Objects.equals(name, product.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price);
+        return Objects.hash(name);
     }
 }
+
+
