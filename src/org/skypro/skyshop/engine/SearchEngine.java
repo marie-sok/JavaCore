@@ -1,12 +1,9 @@
-package org.skypro.skyshop.SearchEngine;
-import org.skypro.skyshop.BestResultNotFound.BestResultNotFound;
-import org.skypro.skyshop.Utilities.ArrayUtil;
+package org.skypro.skyshop.engine;
+
+import org.skypro.skyshop.exceptions.BestResultNotFound;
 import org.skypro.skyshop.search.Searchable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 public final class SearchEngine {
     private final List<Searchable> searchableItems = new ArrayList<>();
@@ -19,17 +16,30 @@ public final class SearchEngine {
     }
 
     public Map<String, Searchable> search(String query) {
-        Map<String, Searchable> results = new TreeMap<>();
+
+        Map<String, Searchable> results = new TreeMap<>(new Comparator<String>() {
+
+
+            @Override
+            public int compare(String s1, String s2) {
+                int lengthCompare = Integer.compare(s1.length(), s2.length());
+                if (lengthCompare != 0) {
+                    return lengthCompare;
+                }
+                return s1.compareTo(s2);
+            }
+        });
+
+
         for (Searchable searchable : searchableItems) {
             if (searchable.getSearchTerm().contains(query)) {
                 String key = searchable.getSearchTerm();
-                if (results.containsKey(key)) {
-                    results.put(key, searchable);
-                }
+
+                results.put(key, searchable);
             }
         }
-            return results;
-        }
+        return results;
+    }
 
 
     public static int countMatches(String searchTerm, String query) {
