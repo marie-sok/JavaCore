@@ -2,86 +2,97 @@ package org.skypro.skyshop.ProductBasket;
 
 import org.skypro.skyshop.product.Product;
 
-import java.util.Objects;
-
+import java.util.*;
 
 public class ProductBasket {
-    private final Product[] basket = new Product[3];
+    private final Map<String, List<Product>> basket = new HashMap<>();
 
     public void addProduct(Product product) {
-        for (int i = 0; i < basket.length; i++) {
-            if (basket[i] == null) {
-                basket[i] = product;
-                return;
+        String productName = product.getName();
+        List<Product> productList = basket.getOrDefault(productName, new ArrayList<>());
+        productList.add(product);
+        basket.put(productName, productList);
+    }
+
+
+    public List<Product> deleteProductsByName(String name) {
+        return basket.remove(name);
+
+
+    }
+
+    public void deleteAndPrintProductsByName(String name) {
+        List<Product> deletedProducts = deleteProductsByName(name);
+        StringBuilder sb = new StringBuilder("List of deleted products: \n");
+        if (deletedProducts == null || deletedProducts.isEmpty()) {
+            for (Product product : deletedProducts) {
+                sb.append(product).append("\n");
             }
+        } else {
+            sb.append("The list is empty");
         }
-        System.out.println("Unable to add product to basket - basket is full");
+        System.out.println(sb);
     }
 
     public double getSumOfProducts() {
         double sum = 0;
-        for (Product product : basket) {
-            if (product != null) {
-                sum += product.getPrice();
+        for (List<Product> products : basket.values()) {
+            for (Product product : products) {
+                if (product != null) {
+                    sum += product.getPrice();
+                }
             }
         }
         return sum;
     }
 
     private boolean basketIsNotEmpty() {
-        for (Product product : basket) {
-            if (product != null) {
-                return true;
-            }
-        }
-        return false;
+        return !basket.isEmpty();
     }
 
     public void printProductBasket() {
-        int specialGoods = 0;
-        double sum = 0;
-        boolean isEmpty = true;
-        for (Product product : basket) {
-            if (product != null) {
-                System.out.println(product);
-                isEmpty = false;
-                sum += product.getPrice();
-                if (product.isSpecial()) {
-                    specialGoods++;
-                }
-            }
-        }
-        if (isEmpty) {
-            System.out.println("The basket is empty");
-        } else {
-            System.out.println("--------------------------------------------------");
-            System.out.printf("Total: %.2f ₽\n", sum);
-            System.out.printf("Special goods: %d\n", specialGoods);
-        }
-    }
-
-    public boolean checkProduct(String name) {
-        for (Product product : basket) {
-            if (product != null && Objects.equals(product.getName(), name)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void cleanBasket() {
-        if (!ProductInBasket()) {
+        if (!basketIsNotEmpty()) {
             System.out.println("The basket is empty");
             return;
         }
-        for (Product product : basket) {
-            if (product != null) {
-                System.out.println(getSumOfProducts());
+        StringBuilder sb = new StringBuilder();
+        double sum = 0;
+        int specialGoods = 0;
+
+        for (List<Product> products : basket.values()) {
+            for (Product product : products) {
+                if (product != null) {
+                    sb.append(product).append("\n");
+                    sum += product.getPrice();
+                    if (product.isSpecial()) {
+                        specialGoods++;
+                    }
+                }
             }
+        }
+
+        sb.append("--------------------------------------------------\n")
+                .append(String.format("Total: %.2f ₽\n", sum))
+                .append(String.format("Special goods: %d\n", specialGoods));
+
+        System.out.println(sb.toString());
+    }
+
+    public boolean checkProduct(String name) {
+        for (List<Product> products : basket.values()) {
+            for (Product product : products) {
+                if (product != null && Objects.equals(product.getName(), name)) {
+                    return true;
+                }
+            }
+        }
+            return false;
+        }
+
+
+
+        public void cleanBasket () {
+            basket.clear();
         }
     }
 
-    private boolean ProductInBasket() {
-        return false;
-    }
-}

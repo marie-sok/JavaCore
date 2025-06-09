@@ -17,5 +17,12 @@ public class FixPriceProduct extends Product {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return new StringBuilder("FixPrice!")
+                .append(getName())
+                .append(": ")
+                .append(String.format("%.2f ₽", getPrice()))
+                .toString();
+    }
 }
-

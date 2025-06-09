@@ -8,7 +8,9 @@ public class SimpleProduct extends Product {
     public SimpleProduct(String name, double price) {
         super(name);
         if (price <= 0) {
-            throw new IllegalArgumentException("The price cannot be less than or equal zero");
+            throw new IllegalArgumentException(
+                    new StringBuilder("The price cannot be less than or equal zero").toString()
+            );
         }
         this.price = price;
     }
@@ -26,11 +28,16 @@ public class SimpleProduct extends Product {
 
     @Override
     public String toString() {
-        return String.format("%s: %.2f ₽", getName(), getPrice());
+        return new StringBuilder()
+                .append(getName())
+                .append(": ")
+                .append(String.format("%.2f ₽", getPrice()))
+                .toString();
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         SimpleProduct that = (SimpleProduct) o;
