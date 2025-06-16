@@ -1,18 +1,19 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.ProductBasket.ProductBasket;
-import org.skypro.skyshop.BestResultNotFound.BestResultNotFound;
+import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.exceptions.BestResultNotFound;
 import org.skypro.skyshop.product.*;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.article.Article;
 import org.skypro.skyshop.search.*;
-import org.skypro.skyshop.SearchEngine.SearchEngine;
+import org.skypro.skyshop.engine.SearchEngine;
 
-
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
+import static jdk.internal.org.jline.utils.AttributedStringBuilder.append;
 
 
 public class App {
@@ -43,8 +44,8 @@ public class App {
         System.out.println();
         productBasket.printProductBasket();
 
-        System.out.println(new StringBuilder("\nDelete product - Tralalelo Tralala"));
-        productBasket.deleteAndPrintProductsByName("Tralalelo Tralala");
+        System.out.println(new StringBuilder("\nDelete product - Tralalero Tralala"));
+        productBasket.deleteAndPrintProductsByName("Tralalero Tralala");
         System.out.println();
         productBasket.printProductBasket();
         printSeparator();
@@ -162,20 +163,19 @@ public class App {
                 .append("\n"));
 
 
-
         System.out.println(new StringBuilder("Search result by name: "));
 
 
-        Map<String,Searchable> searchResults = searchEngine.search(query);
-        for (Map.Entry<String,Searchable> entry:searchResults.entrySet()){
-            Searchable searchResult = entry.getValue();
-            if (searchResult != null) {
-                System.out.println(new StringBuilder()
-                        .append("Name searchable: ")
-                        .append(searchResult.getStringRepresentation()));
-            }
-        }
+        Set<Searchable> searchResults = searchEngine.search(query);
 
+        System.out.println(new StringBuilder("Search results "));
+        append(query);
+        append(" : ");
+        for (Searchable result : searchResults) {
+            System.out.println(" - "
+                    + result.getStringRepresentation());
+        }
+        printSeparator();
 
         System.out.println(new StringBuilder("Create no name SimpleProduct:"));
         try {
@@ -217,6 +217,7 @@ public class App {
 
         System.out.println(new StringBuilder("Create DiscountedProduct with incorrect price:"));
         try {
+
             Product product10 = new DiscountedProduct("Earphones", 3300, 40);
         } catch (IllegalArgumentException ex) {
             System.out.println(new StringBuilder()
