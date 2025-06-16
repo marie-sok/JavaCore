@@ -1,5 +1,4 @@
-package org.skypro.skyshop.Utilities;
-import org.skypro.skyshop.BestResultNotFound.BestResultNotFound;
+package org.skypro.skyshop.utilities;
 
 public class ArrayUtil {
 

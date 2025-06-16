@@ -13,283 +13,143 @@ import org.skypro.skyshop.engine.SearchEngine;
 import java.util.Map;
 import java.util.Set;
 
-import static jdk.internal.org.jline.utils.AttributedStringBuilder.append;
-
 
 public class App {
-    public static void main(String[] args) {
-
-        ProductBasket productBasket = new ProductBasket();
+    public static void main(String[] args) throws IllegalArgumentException, BestResultNotFound {
 
         Product product1 = new SimpleProduct("PopSocket", 530);
         Product product2 = new FixPriceProduct("USB-C Cable");
         Product product3 = new DiscountedProduct("Earphones", 4500, 30);
         Product product4 = new SimpleProduct("Adapter", 700);
+        Product product5 = new SimpleProduct("Homepode", 15000);
+        Product product6 = new SimpleProduct("Smart-watch", 3500);
+        Product product7 = new SimpleProduct("Resident Evil: Village.PS5 Version", 3800);
+        Product product8 = new DiscountedProduct("Disco Elysium. PS5 Version", 2500, 40);
 
-        productBasket.addProduct(product1);
-        productBasket.addProduct(product2);
-        productBasket.addProduct(product3);
-        productBasket.addProduct(product4);
-        productBasket.addProduct(product3);
-        printSeparator();
+        Article article1 = new Article("PopSocket.", "This is universal phoneholder that allows you to comfortably hold your device in your hand and it's also a stylish accessory.") {
+            @Override
+            public String getName() {
+                return "";
+            }
+        };
+        Article article2 = new Article("USB-C Cable.", "No one has ever tied you to the power supply as much as I have.") {
+            @Override
+            public String getName() {
+                return "";
+            }
+        };
 
-        System.out.print(new StringBuilder()
-                .append("Delete basket\n")
-                .append("Print the content\n\n"));
-        productBasket.printProductBasket();
+        Article article3 = new Article("Earphones.", "The new noise cancellation function isolates you into space from the surrounding world.") {
+            @Override
+            public String getName() {
+                return "";
+            }
+        };
 
+        Article article4 = new Article("Homepode","That feeling when home is smarter than you.") {
+            @Override
+            public String getName() {
+                return "";
+            }
+        };
 
-        System.out.println(new StringBuilder("\nDelete Product - PopSocket"));
-        productBasket.deleteAndPrintProductsByName("PopSocket");
+        ProductBasket firstProductBasket = new ProductBasket();
+
+        firstProductBasket.addProduct(product1);
+        firstProductBasket.addProduct(product2);
+        firstProductBasket.addProduct(product3);
+        firstProductBasket.addProduct(product4);
+
+        ProductBasket secondProductBasket = new ProductBasket();
+        secondProductBasket.addProduct(product5);
+        secondProductBasket.addProduct(product6);
+        secondProductBasket.addProduct(product7);
+        secondProductBasket.addProduct(product8);
+
+        firstProductBasket.printProductBasket();
         System.out.println();
-        productBasket.printProductBasket();
 
-        System.out.println(new StringBuilder("\nDelete product - Tralalero Tralala"));
-        productBasket.deleteAndPrintProductsByName("Tralalero Tralala");
+
+        secondProductBasket.printProductBasket();
+
         System.out.println();
-        productBasket.printProductBasket();
-        printSeparator();
 
-        System.out.println(new StringBuilder("Print the contents with a few product"));
-        productBasket.printProductBasket();
-        printSeparator();
+        System.out.println(firstProductBasket.searchProduct("PopSocket"));
+        System.out.println(firstProductBasket.searchProduct("USB-C Cable"));
+        System.out.println(secondProductBasket.searchProduct("Earphones"));
+        System.out.println();
 
-        System.out.println(new StringBuilder()
-                .append("The costs of the basket with a few product\n")
-                .append("Total price of the basket: ")
-                .append(productBasket.getSumOfProducts()));
-        printSeparator();
+        System.out.println(firstProductBasket.removeThisProduct("Adapter"));
+        System.out.println();
 
 
-        String name = "HDMI Cable";
-        System.out.println(new StringBuilder()
-                .append("Search product that is in the basket\n")
-                .append(name)
-                .append(" - ")
-                .append(productBasket.checkProduct(name)));
-        printSeparator();
+        firstProductBasket.printProductBasket();
+        System.out.println();
 
-        name = "Apple";
-        System.out.println(new StringBuilder()
-                .append("Search product that is not in the basket \n")
-                .append(name)
-                .append(" - ")
-                .append(productBasket.checkProduct(name)));
-        printSeparator();
-
-        System.out.println(new StringBuilder("Printing the contents before erase"));
-        productBasket.printProductBasket();
-        productBasket.cleanBasket();
-        printSeparator();
-
-        System.out.println(new StringBuilder("Printing of the empty cart"));
-        productBasket.printProductBasket();
-        printSeparator();
-
-        System.out.println(new StringBuilder()
-                .append("Price of the empty\n")
-                .append("Total price of basket: ")
-                .append(productBasket.getSumOfProducts()));
-        printSeparator();
-
-        name = "Keyboard";
-        System.out.println(new StringBuilder()
-                .append("Search a product by the name in the empty cart\n")
-                .append(name)
-                .append(" - ")
-                .append(productBasket.checkProduct(name)));
-        printSeparator();
+        System.out.println(secondProductBasket.removeThisProduct("Tralalero Tralala"));
 
 
-        System.out.println("The amount of the check of the cart with a few products");
-        System.out.println("Final costs of: " + productBasket.getSumOfProducts());
-        System.out.println("Search for a product in the cart");
-        printSeparator();
-
-
-        Article article1 = new Article("PopSocket.", "This is universal phoneholder that allows you to comfortably hold your device in your hand and it's also a stylish accessory.");
-        Article article2 = new Article("USB-C Cable.", "No one has ever tied you to the power supply as much as I have.");
-        Article article3 = new Article("Earphones.", "The new noise cancellation function isolates you into space from the surrounding world.");
-
-
+        firstProductBasket.clear();
+        firstProductBasket.printProductBasket();
+        System.out.println();
+        System.out.println(firstProductBasket.searchProduct("Earphones"));
         SearchEngine searchEngine = new SearchEngine();
 
+
+        searchEngine.add(product1);
+        searchEngine.add(product2);
+        searchEngine.add(product3);
+        searchEngine.add(product4);
+        searchEngine.add(product5);
+        searchEngine.add(product6);
+        searchEngine.add(product7);
+        searchEngine.add(product8);
+        searchEngine.add(article1);
+        searchEngine.add(article2);
+        searchEngine.add(article3);
+        searchEngine.add(article4);
+        System.out.println();
+
+
+        System.out.println();
+        System.out.println(searchEngine.search("Homepode"));
+        System.out.println(searchEngine.search("Resident Evil:Village. PS5 Version"));
+        System.out.println(searchEngine.search("Disco Elysium. PS5 Version"));
+
+
         try {
-
-            searchEngine.add(product1);
-            searchEngine.add(product2);
-            searchEngine.add(product3);
-            searchEngine.add(article1);
-            searchEngine.add(article2);
-            searchEngine.add(article3);
-        } catch (IllegalArgumentException ex) {
-
-            System.out.println(new StringBuilder("Error: " + ex.getMessage()));
-            return;
+            Searchable bestMatch = searchEngine.searchMostRelevant("PopSocket");
+            System.out.println("Best match object: " + bestMatch.getSearchTerm());
+        } catch (BestResultNotFound e) {
+            System.err.println(e);
         }
 
-        String query = "Earphones";
-
-        System.out.println(new StringBuilder()
-                .append("Search Results ")
-                .append(query)
-                .append(": ")
-                .append(searchEngine.search(query))
-                .append("\n"));
-
-
-        query = "Keyboard";
-        System.out.println(new StringBuilder()
-                .append("Search Results ")
-                .append(query)
-                .append(": ")
-                .append(searchEngine.search(query))
-                .append("\n"));
-
-        query = "Case";
-        System.out.println(new StringBuilder()
-                .append("Search Results ")
-                .append(query)
-                .append(": ")
-                .append(searchEngine.search(query))
-                .append("\n"));
-
-        query = "Sticker";
-        System.out.println(new StringBuilder()
-                .append("Search Results ")
-                .append(query)
-                .append(": ")
-                .append(searchEngine.search(query))
-                .append("\n"));
-
-
-        System.out.println(new StringBuilder("Search result by name: "));
-
-
-        Set<Searchable> searchResults = searchEngine.search(query);
-
-        System.out.println(new StringBuilder("Search results "));
-        append(query);
-        append(" : ");
-        for (Searchable result : searchResults) {
-            System.out.println(" - "
-                    + result.getStringRepresentation());
-        }
-        printSeparator();
-
-        System.out.println(new StringBuilder("Create no name SimpleProduct:"));
         try {
-            Product product10 = new SimpleProduct(" ", 1);
-        } catch (IllegalArgumentException ex) {
-            System.out.println(new StringBuilder()
-                    .append("Error: ")
-                    .append(ex.getMessage())
-                    .append("\n"));
-        }
-
-        System.out.println("Create no name SimpleProduct :");
-        try {
-            Product product10 = new SimpleProduct("Popsocket", 1);
-        } catch (IllegalArgumentException ex) {
-            System.out.println("Error: " + ex.getMessage());
-        }
-
-
-        System.out.println(new StringBuilder("Create FixPriceProduct with incorrect name:"));
-        try {
-            Product product10 = new FixPriceProduct("  ");
-        } catch (IllegalArgumentException ex) {
-            System.out.println(new StringBuilder()
-                    .append("Error: ")
-                    .append(ex.getMessage())
-                    .append("\n"));
-        }
-
-        System.out.println(new StringBuilder("Create DiscountedProduct with incorrect name:"));
-        try {
-            Product product10 = new DiscountedProduct(" ", 500, 20);
-        } catch (IllegalArgumentException ex) {
-            System.out.println(new StringBuilder()
-                    .append("Error: ")
-                    .append(ex.getMessage())
-                    .append("\n"));
-        }
-
-        System.out.println(new StringBuilder("Create DiscountedProduct with incorrect price:"));
-        try {
-
-            Product product10 = new DiscountedProduct("Earphones", 3300, 40);
-        } catch (IllegalArgumentException ex) {
-            System.out.println(new StringBuilder()
-                    .append("Error: ")
-                    .append(ex.getMessage())
-                    .append("\n"));
-
-        }
-        System.out.println(new StringBuilder("Create DiscountedProduct with an incorrect discount: "));
-        try {
-            Product product10 = new DiscountedProduct("Earphones", 4500, 200);
-        } catch (IllegalArgumentException ex) {
-            System.out.println(new StringBuilder()
-                    .append("Error: ")
-                    .append(ex.getMessage())
-                    .append("\n"));
+            product5 = new SimpleProduct("Homepode", 15000);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
 
         }
 
-        printSeparator();
-
-
-        Searchable bestResult;
-
-        query = "riddle erudite";
-        System.out.println(new StringBuilder()
-                .append("Search of the best results for ")
-                .append(query)
-                .append("..."));
         try {
-            bestResult = searchEngine.searchMostRelevant(query);
-            System.out.println(new StringBuilder()
-                    .append("Search results ")
-                    .append(query)
-                    .append(": ")
-                    .append(bestResult));
+            product6 = new SimpleProduct("Smart-Watch", 3500);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
 
-        } catch (BestResultNotFound ex) {
-
-            System.out.println(new StringBuilder()
-                    .append("Error: ")
-                    .append(ex.getMessage())
-                    .append("\n"));
-
-            query = "They say the cows were kidnapped by UFOs";
-            System.out.println(new StringBuilder()
-                    .append("Search of the best results for ")
-                    .append(query)
-                    .append(" "));
         }
         try {
-            bestResult = searchEngine.searchMostRelevant(query);
-            System.out.println(new StringBuilder()
-                    .append("Search results ")
-                    .append(query)
-                    .append(": ")
-                    .append(bestResult));
-        } catch (BestResultNotFound ex) {
-            System.out.println(new StringBuilder()
-                    .append("Error: ")
-                    .append(ex.getMessage())
-                    .append("\n"));
+            product7 = new SimpleProduct("Resident Evil: Village.PS5 Version", 3800);
+
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
-    }
 
-    public static void printSeparator() {
-
-        System.out.println(new StringBuilder("\n____________________________________________________________________________\n"));
-
+        try {
+            product8 = new DiscountedProduct("Disco Elysium.PS5 Version", 2800, 40);
+        }catch (IllegalArgumentException e){
+        }
     }
 }
-
 
 
 
