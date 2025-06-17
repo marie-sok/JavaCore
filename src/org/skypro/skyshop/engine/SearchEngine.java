@@ -8,79 +8,73 @@ import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 import java.util.function.ToIntFunction;
 import java.util.function.ToLongFunction;
+import java.util.stream.Collectors;
+
+import static java.awt.SystemColor.text;
+import static java.util.Locale.filter;
+
 
 public final class SearchEngine {
     private final Set<Searchable> searchableItems = new HashSet<>();
 
-    public void add(Searchable searchable) {
-        if (searchable == null) {
-            throw new IllegalArgumentException("The element of a search cannot be null");
-        }
-        searchableItems.add(searchable);
+    public void add(Searchable item) {
+        searchableItems.add(item);
     }
 
 
-    public Set<Searchable> search(String query) {
+    public Set<Searchable> search(String searchString) {
 
-        Comparator<Searchable> comparator = Comparator
-                .comparingInt((Searchable s) -> s.getSearchTerm().length()).reversed()
-                .thenComparing(Searchable::getSearchTerm);
+        return searchableItems.stream()
+                .filter(item ->
+                        item.getName().toLowerCase().contains(searchString.toLowerCase()))
+
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new org.skypro.skyshop.search.SearchResultComparator())));
+
+    }
 
 
-        Set<Searchable> results = new TreeSet<>(comparator);
+
+    public Searchable searchMostRelevant(String search) throws BestResultNotFound {
+        Searchable bestMatch = null;
+        int maxOccurrences = 0;
 
 
-        if (query == null || query.isEmpty()) {
-            return results;
-        }
+        for (Searchable searchable : searchableItems) {
+            String searchTerm = searchable.getSearchTerm();
+            int occurrences = countOccurrences(searchTerm, search);
 
-                for (Searchable searchable : searchableItems) {
-                    if (searchable.getSearchTerm().contains(query)) {
-                        String key = searchable.getSearchTerm();
-
-                        results.add(searchable);
-                    }
-                }
-                return results;
+            if (occurrences > maxOccurrences) {
+                maxOccurrences = occurrences;
+                bestMatch = searchable;
             }
 
+            if (bestMatch == null) throw new BestResultNotFound(search);
+        }
+            return bestMatch;
+        }
 
 
-            public static int countMatches(String searchTerm, String query) {
-                if (searchTerm.isEmpty() || query.isEmpty()) {
-                    return 0;
-                }
+
+            private int countOccurrences (String text, String subString) {
                 int count = 0;
-                int fromIndex = 0;
-                int queryLength = query.length();
-                while ((fromIndex = searchTerm.indexOf(query, fromIndex)) != -1) {
+                int index = 0;
+                int subStringIndex;
+
+                while ((subStringIndex = text.indexOf(subString, index)) != -1) {
+
+
                     count++;
-                    fromIndex += queryLength;
+                    index = subStringIndex + subString.length();
+
                 }
+
                 return count;
             }
-
-            public Searchable searchMostRelevant(String query) throws BestResultNotFound {
-                if (searchableItems.isEmpty()) {
-                    throw new BestResultNotFound("An array of elements to search is empty");
-                }
-
-                Searchable mostRelevant = null;
-                int maxCount = -1;
-
-                for (Searchable item : searchableItems) {
-                    int count = countMatches(item.getSearchTerm(), query);
-                    if (count > maxCount) {
-                        maxCount = count;
-                        mostRelevant = item;
-                    }
-                }
-
-                if (maxCount <= 0) {
-                    throw new BestResultNotFound("No matches found");
-                }
-
-                return mostRelevant;
-            }
         }
+
+
+
+
+
+
 
